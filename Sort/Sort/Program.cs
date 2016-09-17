@@ -25,11 +25,13 @@ namespace Sort
             all_persons = sort_persons(all_persons);
 
             //Method create_path will generate the path of output file with appropriate name
-            string newpath = create_path(path);
+            string [] newpath = create_path(path);
+            string new_filepath = newpath[0] + "\\" + newpath[1] + "-graded" + newpath[2];
 
             //Method write_textfile will write the output to a text file
-            write_textfile(all_persons, newpath);
+            write_textfile(all_persons,new_filepath);
 
+            Console.WriteLine("Finished: created " + newpath[1] + "-graded" + newpath[2]);
             Console.Read();
         }
 
@@ -40,8 +42,7 @@ namespace Sort
         {
 
             System.IO.TextReader reader = new System.IO.StreamReader(path);
-
-            Console.WriteLine("All names");
+            
             string line = "";
             while ((line = reader.ReadLine()) != null)
             {
@@ -54,8 +55,6 @@ namespace Sort
                     Console.WriteLine("Invalid value");
                     Environment.Exit(0);
                 }
-
-                Console.WriteLine(words[0] + " " + words[1] + " " + i);
                 all_persons.Add(new person(words[0], words[1], i));
             }
             reader.Close();
@@ -68,11 +67,10 @@ namespace Sort
         static void write_textfile(List<person> all, string new_path)
         {
             System.IO.TextWriter writer = new System.IO.StreamWriter(new_path);
-            Console.WriteLine("\nSorted:");
-
+            
             foreach (person p in all)
             {
-                Console.WriteLine(p.LastName + " " + p.FirstName + " " + p.Score);
+                Console.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
                 writer.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
             }
             writer.Close();
@@ -101,15 +99,20 @@ namespace Sort
 
 
         /*Method create_path accepts a filepath entered by user and returns the file path for output file     */
-        static string create_path(string filePath)
+        static string[] create_path(string filePath)
         {
-            string directoryName, extension, filename;
+            string [] file=new string[3];
 
-            directoryName = System.IO.Path.GetDirectoryName(filePath);
-            filename = System.IO.Path.GetFileNameWithoutExtension(filePath);
-            extension = System.IO.Path.GetExtension(filePath);
+            //file[0] represent directoryName
+            file[0] = System.IO.Path.GetDirectoryName(filePath);
 
-            return directoryName + "\\" + filename + "-graded" + extension;
+            //file[1] represents filename
+            file[1] = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+            //file[2] represents extension
+            file[2] = System.IO.Path.GetExtension(filePath);
+
+            return file;
         }
     }
 }
