@@ -41,23 +41,32 @@ namespace Sort
         static List<person> read_textfile(string path, List<person> all_persons)
         {
 
-            System.IO.TextReader reader = new System.IO.StreamReader(path);
-            
-            string line = "";
-            while ((line = reader.ReadLine()) != null)
+            try
             {
-                char[] delims = { ' ', ',', '\n' };
-                string[] words = line.Split(delims, StringSplitOptions.RemoveEmptyEntries);
 
-                int i;
-                if (int.TryParse(words[2], out i) == false)
+                System.IO.TextReader reader = new System.IO.StreamReader(path);
+
+                string line = "";
+                while ((line = reader.ReadLine()) != null)
                 {
-                    Console.WriteLine("Invalid value");
-                    Environment.Exit(0);
+                    char[] delims = { ' ', ',', '\n' };
+                    string[] words = line.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+                    int i;
+                    if (int.TryParse(words[2], out i) == false)
+                    {
+                        Console.WriteLine("Invalid score value");
+                        Environment.Exit(0);
+                    }
+                    all_persons.Add(new person(words[0], words[1], i));
                 }
-                all_persons.Add(new person(words[0], words[1], i));
+                reader.Close();
+
             }
-            reader.Close();
+            catch (Exception e)
+            {
+                Console.WriteLine("Wrong path sepcified.Exception: {0}", e.ToString());
+            }
 
             return all_persons;
         }
@@ -66,14 +75,25 @@ namespace Sort
          * This method creates an output text file and writes output in that file                       */
         static void write_textfile(List<person> all, string new_path)
         {
-            System.IO.TextWriter writer = new System.IO.StreamWriter(new_path);
-            
-            foreach (person p in all)
+            try
             {
-                Console.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
-                writer.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
+                if (System.IO.File.Exists(new_path))
+                {
+                    System.IO.File.Delete(new_path);
+                }
+                System.IO.TextWriter writer = new System.IO.StreamWriter(new_path);
+
+                foreach (person p in all)
+                {
+                    Console.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
+                    writer.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
+                }
+                writer.Close();
             }
-            writer.Close();
+            catch (Exception e)
+            {
+                Console.WriteLine("\nException: {0}", e.ToString());
+            }
         }
 
         /*Method sort_persons accepts a list of objects of person and sorts it based on score
