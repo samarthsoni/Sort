@@ -29,10 +29,7 @@ namespace Sort
                 //Method create_path will generate the path of output file with appropriate name
                 string[] newpath = create_path(path);
                 string new_filepath = newpath[0] + "\\" + newpath[1] + "-graded" + newpath[2];
-                Console.WriteLine("old and new path" + path + " " );
-                for (int c = 0; c < 3; c++)
-                    Console.WriteLine(newpath[c]);
-
+                
                 //Method write_textfile will write the output to a text file
                 write_textfile(all_persons, new_filepath);
 
