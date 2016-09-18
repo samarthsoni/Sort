@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sort
 {
-    class person
+    public class person
     {
         public string LastName { get; set; }
 
@@ -21,5 +21,15 @@ namespace Sort
             Score = score;
         }
 
+        public override bool Equals(Object obj)
+        {
+            if (obj is person)
+            {
+                var that = obj as person;
+                return this.Score == that.Score && this.LastName == that.LastName && this.FirstName == that.FirstName;
+            }
+
+            return false;
+        }
     }
 }

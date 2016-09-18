@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sort
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -14,31 +14,40 @@ namespace Sort
             string path;
             path = Console.ReadLine();
 
-            //Declaring a list of objects of class person to represent different persons
-            List<person> all_persons = new List<person>();
+            if (System.IO.File.Exists(path))
+            {
+                //Declaring a list of objects of class person to represent different persons
+                List<person> all_persons = new List<person>();
 
-            //Method read_textfile will read the text file and extract all names and score
-            //and will return a populated object list of person
-            all_persons = read_textfile(path, all_persons);
+                //Method read_textfile will read the text file and extract all names and score
+                //and will return a populated object list of person
+                all_persons = read_textfile(path, all_persons);
 
-            //Method sort_persons will sort list of objects of person in descending order
-            all_persons = sort_persons(all_persons);
+                //Method sort_persons will sort list of objects of person in descending order
+                all_persons = sort_persons(all_persons);
 
-            //Method create_path will generate the path of output file with appropriate name
-            string [] newpath = create_path(path);
-            string new_filepath = newpath[0] + "\\" + newpath[1] + "-graded" + newpath[2];
+                //Method create_path will generate the path of output file with appropriate name
+                string[] newpath = create_path(path);
+                string new_filepath = newpath[0] + "\\" + newpath[1] + "-graded" + newpath[2];
+                Console.WriteLine("old and new path" + path + " " );
+                for (int c = 0; c < 3; c++)
+                    Console.WriteLine(newpath[c]);
 
-            //Method write_textfile will write the output to a text file
-            write_textfile(all_persons,new_filepath);
+                //Method write_textfile will write the output to a text file
+                write_textfile(all_persons, new_filepath);
 
-            Console.WriteLine("Finished: created " + newpath[1] + "-graded" + newpath[2]);
+                Console.WriteLine("Finished: created " + newpath[1] + "-graded" + newpath[2]);
+            }
+            else
+                Console.WriteLine("Enter a valid file path");
+
             Console.Read();
         }
 
         /* Method read_textfile accepts a filepath and empty list of objects of class person as arguments
          * Reads the text file and populates the list of objects
          * Returns a populated list of objects of class person                                          */
-        static List<person> read_textfile(string path, List<person> all_persons)
+        public static List<person> read_textfile(string path, List<person> all_persons)
         {
 
             try
@@ -73,7 +82,7 @@ namespace Sort
 
         /* Method write_textfile accepts a sorted list of objects of person and a path for output file
          * This method creates an output text file and writes output in that file                       */
-        static void write_textfile(List<person> all, string new_path)
+        public static void write_textfile(List<person> all, string new_path)
         {
             try
             {
@@ -99,7 +108,7 @@ namespace Sort
         /*Method sort_persons accepts a list of objects of person and sorts it based on score
          * For objects with equal score, sorting is done based on last name
          * For same last names, sorting done based on first name                            */
-        static List<person> sort_persons(List<person> all)
+        public static List<person> sort_persons(List<person> all)
         {
             all.Sort((x, y) =>
             {
@@ -119,19 +128,26 @@ namespace Sort
 
 
         /*Method create_path accepts a filepath entered by user and returns the file path for output file     */
-        static string[] create_path(string filePath)
+        public static string[] create_path(string filePath)
         {
             string [] file=new string[3];
 
-            //file[0] represent directoryName
-            file[0] = System.IO.Path.GetDirectoryName(filePath);
+            try
+            {
+                //file[0] represent directoryName
+                file[0] = @System.IO.Path.GetDirectoryName(filePath);
 
-            //file[1] represents filename
-            file[1] = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                //file[1] represents filename
+                file[1] = @System.IO.Path.GetFileNameWithoutExtension(filePath);
 
-            //file[2] represents extension
-            file[2] = System.IO.Path.GetExtension(filePath);
+                //file[2] represents extension
+                file[2] = @System.IO.Path.GetExtension(filePath);
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nException: {0}", e.ToString());
+            }
             return file;
         }
     }
