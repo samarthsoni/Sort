@@ -10,7 +10,7 @@ namespace Sort
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the path to input text file:");
+            Console.WriteLine("Enter path to text file \ngrade-scores:");
             string path;
             path = Console.ReadLine();
 
@@ -33,10 +33,10 @@ namespace Sort
                 //Method write_textfile will write the output to a text file
                 write_textfile(all_persons, new_filepath);
 
-                Console.WriteLine("Finished: created " + newpath[1] + "-graded" + newpath[2]);
+                Console.WriteLine("\nFinished: created " + newpath[1] + "-graded" + newpath[2]);
             }
             else
-                Console.WriteLine("Enter a valid file path");
+                Console.WriteLine("\nEnter a valid file path");
 
             Console.Read();
         }
@@ -55,23 +55,31 @@ namespace Sort
                 string line = "";
                 while ((line = reader.ReadLine()) != null)
                 {
-                    char[] delims = { ' ', ',', '\n' };
-                    string[] words = line.Split(delims, StringSplitOptions.RemoveEmptyEntries);
-
-                    int i;
-                    if (int.TryParse(words[2], out i) == false)
+                    if (line  == ""||line==" ")
                     {
-                        Console.WriteLine("Invalid score value");
-                        Environment.Exit(0);
+                        continue;
                     }
-                    all_persons.Add(new person(words[0], words[1], i));
+                    else
+                    {
+                        char[] delims = { ' ', ',', '\n' };
+                        string[] words = line.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+                        int i;
+                        if (int.TryParse(words[2], out i) == false)
+                        {
+                            Console.WriteLine("Invalid score value");
+                            Environment.Exit(0);
+                        }
+                        all_persons.Add(new person(words[0], words[1], i));
+                    }
+
                 }
                 reader.Close();
 
             }
             catch (Exception e)
             {
-                Console.WriteLine("Wrong path sepcified.Exception: {0}", e.ToString());
+                Console.WriteLine("Wrong path sepcified or invalid contents.Exception: {0}", e.ToString());
             }
 
             return all_persons;
@@ -91,7 +99,7 @@ namespace Sort
 
                 foreach (person p in all)
                 {
-                    Console.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
+                    Console.WriteLine("\n"+p.LastName + ", " + p.FirstName + ", " + p.Score);
                     writer.WriteLine(p.LastName + ", " + p.FirstName + ", " + p.Score);
                 }
                 writer.Close();
