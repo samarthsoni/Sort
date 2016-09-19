@@ -51,7 +51,6 @@ namespace Sort
             {
 
                 System.IO.TextReader reader = new System.IO.StreamReader(path);
-
                 string line = "";
                 while ((line = reader.ReadLine()) != null)
                 {
